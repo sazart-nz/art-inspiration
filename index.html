@@ -6,13 +6,14 @@
   <meta name="description" content="A colourful place to find photographic inspiration for your next artwork.">
   <meta name="theme-color" content="#412253">
   <title>Art Inspiration | Find your spark</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="/" aria-label="Art Inspiration home"><span class="brand-mark" aria-hidden="true">✳</span> Art Inspiration</a>
-      <span class="header-note">A little colour for your next idea <span aria-hidden="true">✦</span></span>
+      <button id="saved-toggle" class="header-action" type="button">Saved inspiration <span id="saved-count">0</span></button>
     </div>
   </header>
   <main class="container">
@@ -21,7 +22,7 @@
         <p class="eyebrow">YOUR CREATIVE STARTING POINT <span aria-hidden="true">✦</span></p>
         <h1>Find your <em>spark.</em></h1>
         <p class="intro">A world of colour, texture and possibility. Search for the subject that makes you want to pick up a brush.</p>
-        <p class="hero-footnote">Explore real photography from Pexels for your next artwork.</p>
+        <p class="hero-footnote">Explore photographs and open access art for your next artwork.</p>
       </div>
       <div class="artwork" aria-hidden="true"><div class="sun"></div><div class="arch arch-one"></div><div class="arch arch-two"></div><div class="flower flower-one">✿</div><div class="flower flower-two">✿</div><span class="artwork-caption">LOOK CLOSER<br>MAKE SOMETHING</span></div>
     </header>
@@ -30,7 +31,7 @@
       <div class="search-heading"><div><p class="section-kicker">THE INSPIRATION DESK</p><h2>What are you dreaming of?</h2></div><span class="handdrawn" aria-hidden="true">↘</span></div>
 
     <form id="search-form" class="search-form" role="search">
-      <label class="sr-only" for="search-input">Search photos for art inspiration</label>
+      <label class="sr-only" for="search-input">Search images for art inspiration</label>
       <input
         id="search-input"
         name="query"
@@ -41,13 +42,16 @@
       >
       <button type="submit">Find inspiration <span aria-hidden="true">↗</span></button>
     </form>
+    <div class="search-options"><label for="source-select">Explore</label><select id="source-select"><option value="photos">Pexels photography</option><option value="art">Art Institute of Chicago</option><option value="cleveland">Cleveland Museum of Art</option><option value="openverse">Openverse art &amp; illustrations</option></select><button id="daily-button" type="button">✦ Today's inspiration</button></div>
     <p class="search-hint">A subject, a colour, a place, a mood — follow your curiosity.</p>
     </section>
 
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <section class="gallery-section" aria-label="Search results"><div class="gallery-heading"><p class="section-kicker">YOUR VISUAL NOTEBOOK</p><h2>Fresh eyes. New ideas.</h2></div><div id="results" class="results-grid"></div></section>
-    <footer>Made for curious makers <span aria-hidden="true">✳</span> Photos open on Pexels.</footer>
+    <footer>Made for curious makers <span aria-hidden="true">✳</span> Search Pexels, two museum collections, and Openverse. Check the licence and original record for each image before reuse.</footer>
   </main>
+
+  <dialog id="saved-dialog" aria-labelledby="saved-heading"><div class="saved-head"><h2 id="saved-heading">Saved inspiration</h2><button id="saved-close" type="button" aria-label="Close saved inspiration">✕</button></div><p>Saved in this browser on this device. Clearing browser data removes these items.</p><div id="saved-items" class="saved-items"></div></dialog>
 
   <template id="photo-template">
     <article class="photo-card">
@@ -58,6 +62,8 @@
           <span class="view-label">View on Pexels →</span>
         </div>
       </a>
+      <div class="rights-details"><span class="source-name"></span><p class="credit-note"></p><a class="licence-link" target="_blank" rel="noopener noreferrer">View licence &amp; terms ↗</a></div>
+      <button type="button" class="save-photo" aria-label="Save inspiration">♡ Save</button>
     </article>
   </template>
 
