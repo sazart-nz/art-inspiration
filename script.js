@@ -83,10 +83,16 @@ let controller;
 form.addEventListener('submit', async event => {
   event.preventDefault(); const query = input.value.trim();
   if (!query) { showError('Enter a search term.'); input.focus(); return; }
+  if (sourceSelect.value === 'openverse') {
+    window.open(`https://openverse.org/search/image?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+    status.className = 'status';
+    status.textContent = 'Openverse search opened in a new tab. Check each image’s licence and attribution on Openverse.';
+    return;
+  }
   controller?.abort(); controller = new AbortController(); const active = controller;
   setLoading(true); results.replaceChildren();
   try {
-    const path = { art: '/api/art', cleveland: '/api/cleveland', openverse: '/api/openverse', photos: '/api/search' }[sourceSelect.value] || '/api/search';
+    const path = sourceSelect.value === 'cleveland' ? '/api/cleveland' : '/api/search';
     const response = await fetch(`${path}?q=${encodeURIComponent(query)}`, { signal: active.signal });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || 'The image search failed.');
@@ -95,7 +101,12 @@ form.addEventListener('submit', async event => {
     if (error.name !== 'AbortError' && controller === active) showError(error.message || 'Unable to load images. Please try again.');
   } finally { if (controller === active) { button.disabled = false; button.textContent = 'Find inspiration ↗'; } }
 });
-sourceSelect.addEventListener('change', () => { if (input.value.trim()) form.requestSubmit(); });
+sourceSelect.addEventListener('change', () => {
+  if (sourceSelect.value === 'openverse') {
+    results.replaceChildren();
+    status.textContent = 'Press Find inspiration to open Openverse in a new tab.';
+  } else if (input.value.trim()) form.requestSubmit();
+});
 const dailyIdeas = ['wildflowers', 'dramatic skies', 'colourful birds', 'sunlit forest', 'ocean textures', 'bright gardens', 'mountain light', 'whimsical animals', 'old doorways', 'autumn leaves', 'water reflections', 'desert colours'];
 function searchDailyIdea() {
   const today = new Date(); const date = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
