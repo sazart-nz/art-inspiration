@@ -49,6 +49,9 @@ export default async function handler(request, response) {
       alt: photo.alt,
       photographer: photo.photographer,
       photographerUrl: photo.photographer_url,
+      source: 'Pexels', license: 'Pexels License',
+      licenseUrl: 'https://www.pexels.com/license/',
+      creditRequirement: 'Credit not required; photographer credit appreciated. See licence for restrictions.',
       src: {
         medium: photo.src.medium,
         large: photo.src.large
