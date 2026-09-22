@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Search high-quality photos from Pexels.">
+  <title>Pexels Image Search</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <p class="eyebrow">IMAGE DISCOVERY</p>
+      <h1>Find your next visual.</h1>
+      <p class="intro">Search high-quality photography from Pexels.</p>
+    </header>
+
+    <form id="search-form" class="search-form" role="search">
+      <label class="sr-only" for="search-input">Search photos</label>
+      <input
+        id="search-input"
+        name="query"
+        type="search"
+        placeholder="Try “watercolour”, “mountains” or “studio light”"
+        autocomplete="off"
+        required
+      >
+      <button type="submit">Search</button>
+    </form>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <section id="results" class="results-grid" aria-label="Search results"></section>
+  </main>
+
+  <template id="photo-template">
+    <article class="photo-card">
+      <a class="photo-link" target="_blank" rel="noopener noreferrer">
+        <img class="photo" loading="lazy" decoding="async" alt="">
+        <div class="photo-details">
+          <span class="photographer"></span>
+          <span class="view-label">View on Pexels →</span>
+        </div>
+      </a>
+    </article>
+  </template>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
