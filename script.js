@@ -7,7 +7,7 @@ const template = document.querySelector('#photo-template');
 
 function setLoading(isLoading) {
   button.disabled = isLoading;
-  button.textContent = isLoading ? 'Searching…' : 'Search';
+  button.textContent = isLoading ? 'Searching…' : 'Find inspiration ↗';
   status.className = 'status';
   status.innerHTML = isLoading
     ? '<span class="loader" aria-hidden="true"></span>Loading images…'
@@ -73,6 +73,6 @@ form.addEventListener('submit', async (event) => {
     showError(error.message || 'Unable to load images. Please try again.');
   } finally {
     button.disabled = false;
-    button.textContent = 'Search';
+    button.textContent = 'Find inspiration ↗';
   }
 });
