@@ -1,12 +1,22 @@
-# Pexels Image Search
+# Art Inspiration
 
-A dependency-free image search site for GitHub and Vercel. The browser calls `/api/search`; the serverless function securely calls Pexels with `PEXELS_API_KEY`.
+The working site for artists who want a starting point when facing a blank canvas.
 
-## Local development
+Live site: https://art-inspiration-six.vercel.app/  
+Repository: https://github.com/sazart-nz/art-inspiration
 
-1. Install the Vercel CLI: `npm install -g vercel`
-2. Copy `.env.example` to `.env.local` and add your key.
-3. Run `vercel dev`.
-4. Open the local URL shown in the terminal.
+## What is here
 
-Do not commit `.env.local` or your API key.
+- `index.html`, `styles.css`, `script.js`, `favicon.svg`: the frontend.
+- `api/search.js`: Pexels photography search. Requires `PEXELS_API_KEY` in Vercel environment settings.
+- `api/cleveland.js`: Cleveland Museum of Art search for CC0 works with images.
+- `api/art.js` and `api/openverse.js`: older functions retained for history; the current frontend does not call them.
+- `vercel.json`: deployment configuration.
+
+The page offers suggested searches, colour starters, a surprise search, the daily idea, and short creative prompts. Openverse opens its own site in a new tab. Saved images and notes live only in the current browser's local storage; they do not sync between devices. Always check the original image licence before reuse.
+
+## Updating the site
+
+Upload the contents of this folder to the repository root, retaining the `api` subfolder. Commit the changed files in GitHub; Vercel deploys the repository. Do not upload the ZIP itself to GitHub expecting it to expand. Never put the Pexels key into a file or commit it.
+
+To test API searches locally, use the Vercel CLI with a local `PEXELS_API_KEY` environment variable and run `vercel dev`. Opening `index.html` directly will show the layout but cannot call the serverless API routes.

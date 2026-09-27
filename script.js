@@ -50,7 +50,9 @@ function renderSaved() {
     const credit = document.createElement('small'); credit.textContent = terms.credit;
     const info = document.createElement('div'); info.className = 'saved-info'; info.append(link, licence, credit);
     const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Remove'; remove.addEventListener('click', () => { saved = saved.filter(x => itemId(x) !== itemId(photo)); persist(); renderSaved(); document.querySelectorAll('.save-photo').forEach(btn => { if (btn.dataset.itemId === itemId(photo)) updateSaveButton(btn, photo); }); });
-    row.append(image, info, remove); box.append(row);
+    const note = document.createElement('input'); note.type = 'text'; note.className = 'saved-note'; note.maxLength = 180; note.placeholder = 'Why did this catch your eye?'; note.setAttribute('aria-label', `Your note for ${photo.alt || 'this image'}`); note.value = photo.note || '';
+    note.addEventListener('change', () => { photo.note = note.value.trim(); persist(); });
+    info.append(note); row.append(image, info, remove); box.append(row);
   });
 }
 document.querySelector('#saved-toggle').addEventListener('click', () => { renderSaved(); dialog.showModal(); });
@@ -58,7 +60,7 @@ document.querySelector('#saved-close').addEventListener('click', () => dialog.cl
 dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
 function renderPhotos(photos, query) {
   results.replaceChildren();
-  if (!photos.length) { status.textContent = `No images found for “${query}”. Try another search.`; return; }
+  if (!photos.length) { status.textContent = `No images found for “${query}”. Try a broader subject or one of the starting points above.`; return; }
   const fragment = document.createDocumentFragment();
   photos.forEach(photo => {
     const card = template.content.cloneNode(true);
@@ -78,12 +80,14 @@ function renderPhotos(photos, query) {
   });
   results.append(fragment);
   status.textContent = `${photos.length} images for “${query}”`;
+  showPrompt();
 }
 let controller;
 form.addEventListener('submit', async event => {
   event.preventDefault(); const query = input.value.trim();
   if (!query) { showError('Enter a search term.'); input.focus(); return; }
   if (sourceSelect.value === 'openverse') {
+    controller?.abort();
     window.open(`https://openverse.org/search/image?q=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
     status.className = 'status';
     status.textContent = 'Openverse search opened in a new tab. Check each image’s licence and attribution on Openverse.';
@@ -103,15 +107,36 @@ form.addEventListener('submit', async event => {
 });
 sourceSelect.addEventListener('change', () => {
   if (sourceSelect.value === 'openverse') {
+    controller?.abort(); button.disabled = false; button.textContent = 'Find inspiration ↗';
     results.replaceChildren();
     status.textContent = 'Press Find inspiration to open Openverse in a new tab.';
   } else if (input.value.trim()) form.requestSubmit();
 });
 const dailyIdeas = ['wildflowers', 'dramatic skies', 'colourful birds', 'sunlit forest', 'ocean textures', 'bright gardens', 'mountain light', 'whimsical animals', 'old doorways', 'autumn leaves', 'water reflections', 'desert colours'];
+const surpriseIdeas = ['iridescent beetles', 'neon city reflections', 'mossy doorways', 'colourful sea creatures', 'sunlit glass', 'windblown grasses', 'flamingo feathers', 'abstract architecture', 'tropical fruit', 'storm clouds over mountains', 'vivid fungi', 'desert wildflowers'];
+const prompts = [
+  'Choose one image and borrow just its colours for a quick sketch.',
+  'Look for the strongest shape. Make an abstract using only that shape.',
+  'Paint the same subject in colours it would never normally wear.',
+  'Crop in close and make the smallest detail the whole artwork.',
+  'Use three colours from an image and invent a completely different scene.',
+  'Draw the movement you see, without worrying about accurate outlines.',
+  'Turn the light and shadow into bold blocks of colour.'
+];
+let previousPrompt = 0;
+function showPrompt() {
+  const next = (previousPrompt + 1 + Math.floor(Math.random() * (prompts.length - 1))) % prompts.length;
+  previousPrompt = next;
+  document.querySelector('#creative-prompt').textContent = prompts[next];
+}
+function searchFor(query) { input.value = query; form.requestSubmit(); }
+document.querySelectorAll('[data-query]').forEach(chip => chip.addEventListener('click', () => searchFor(chip.dataset.query)));
+document.querySelector('#surprise-button').addEventListener('click', () => searchFor(surpriseIdeas[Math.floor(Math.random() * surpriseIdeas.length)]));
+document.querySelector('#prompt-button').addEventListener('click', showPrompt);
 function searchDailyIdea() {
   const today = new Date(); const date = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
   let hash = 0; for (const character of date) hash = (hash * 31 + character.charCodeAt(0)) >>> 0;
-  input.value = dailyIdeas[hash % dailyIdeas.length]; form.requestSubmit();
+  searchFor(dailyIdeas[hash % dailyIdeas.length]);
 }
 document.querySelector('#daily-button').addEventListener('click', searchDailyIdea);
 persist();
