@@ -24,3 +24,7 @@ To test API searches locally, use the Vercel CLI with a local `PEXELS_API_KEY` e
 ## Art Idea Studio
 
 `create.html`, `create.css`, and `create.js` provide a free, editable prompt composer. A “Build idea” button on a search result carries its description and source link to the studio. The original image is shown for reference. The prompt is built entirely in the visitor's browser and can be copied for use in an external tool. This site does not call an image-generation API, require an API key, or incur image-generation charges. External services have their own terms and limits.
+
+## Your own images
+
+The Art Idea Studio accepts a local JPG, PNG or WebP up to 15 MB. The image is previewed from a temporary object URL in the current browser tab; it is not uploaded to Art Inspiration or stored by the site. The visitor can sample four approximate colours locally, edit the subject and other fields, then copy a prompt. The prompt cannot carry the image data: to use the image as an actual visual reference, attach the same file in ChatGPT or the chosen external image tool when pasting the prompt. No image-analysis or generation API is called by this feature.
