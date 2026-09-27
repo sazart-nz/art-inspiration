@@ -20,3 +20,7 @@ The page offers suggested searches, colour starters, a surprise search, the dail
 Upload the contents of this folder to the repository root, retaining the `api` subfolder. Commit the changed files in GitHub; Vercel deploys the repository. Do not upload the ZIP itself to GitHub expecting it to expand. Never put the Pexels key into a file or commit it.
 
 To test API searches locally, use the Vercel CLI with a local `PEXELS_API_KEY` environment variable and run `vercel dev`. Opening `index.html` directly will show the layout but cannot call the serverless API routes.
+
+## Art Idea Studio
+
+`create.html`, `create.css`, and `create.js` provide a free, editable prompt composer. A “Build idea” button on a search result carries its description and source link to the studio. The original image is shown for reference. The prompt is built entirely in the visitor's browser and can be copied for use in an external tool. This site does not call an image-generation API, require an API key, or incur image-generation charges. External services have their own terms and limits.

@@ -75,6 +75,10 @@ function renderPhotos(photos, query) {
     card.querySelector('.credit-note').textContent = terms.credit;
     card.querySelector('.licence-link').href = terms.licenseUrl;
     const saveButton = card.querySelector('.save-photo'); saveButton.dataset.itemId = itemId(photo); updateSaveButton(saveButton, photo);
+    card.querySelector('.use-photo').addEventListener('click', () => {
+      try { sessionStorage.setItem('art-inspiration-selected-v1', JSON.stringify({ description: photo.alt || '', source: terms.source, creator: photo.photographer || '', url: safeUrl(photo.url), thumbnail: safeUrl(photo.src.medium) })); } catch {}
+      window.location.href = 'create.html';
+    });
     saveButton.addEventListener('click', () => { if (saved.some(x => itemId(x) === itemId(photo))) saved = saved.filter(x => itemId(x) !== itemId(photo)); else saved.unshift(photo); persist(); updateSaveButton(saveButton, photo); });
     fragment.append(card);
   });
